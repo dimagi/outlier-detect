@@ -1,7 +1,8 @@
 # Outlier Detect
 
 **Author**: Ben Birnbaum (benjamin.birnbaum@gmail.com)
-**Contributors**: Faisal Lalani, Brian DeRenzi
+
+**Contributors**: Faisal Lalani (flalani@dimagi.com), Brian DeRenzi (bderenzi@dimagi.com)
 
 This is a Python implemention of the Multinomial Model Algorithm (MMA) for outlier detection in survey responses. It works by comparing a set of answers by a particular interviewer to the set of answers by fellow responders. Based on how similar this observed distribution is to the expected, an outlier score is given to the interviewer & question pair.
 
