@@ -16,7 +16,7 @@ import pandas as pd
 
 
 DATA_FILE = 'example_data.csv'
-
+QUESTIONS = ['cough', 'fever']
 
 def print_scores(scores):
     for interviewer in scores.keys():
@@ -26,21 +26,21 @@ def print_scores(scores):
         for column in scores[interviewer].keys():
             
             score = scores[interviewer][column]['score']
-            observed_frequencies = scores[interviewer][column]['observed_freq']
-            expected_frequencies = scores[interviewer][column]['expected_freq']
-            p_value = scores[interviewer][column]['p_value']
 
-            print("Interviewer: %s" % interviewer)
             print("Question: %s" % column)
             print("Score: %d" % score)
 
+            # observed_frequencies = scores[interviewer][column]['observed_freq']
+            # expected_frequencies = scores[interviewer][column]['expected_freq']
+            # p_value = scores[interviewer][column]['p_value']
+            # print("Observed Frequencies: %s" % observed_frequencies)
+            # print("Expected Frequencies: %s" % expected_frequencies)
+            # print("P-Value: %d" % p_value)
+
 if __name__ == '__main__':
     data = pd.read_csv(DATA_FILE)  # Uncomment to load as pandas.DataFrame.
-    
-    # Fill in with responses you wish to skip over.
-    ignore_responses = []
 
     # Compute MMA outlier scores.
-    (mma_scores, _) = outlierdetect.run_mma(data, 'interviewer_id', ['cough', 'fever'], ignore_responses)
+    (mma_scores, _) = outlierdetect.run_mma(data, 'interviewer_id', QUESTIONS)
     print("\nMMA outlier scores")
     print_scores(mma_scores)
