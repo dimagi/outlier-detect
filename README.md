@@ -22,7 +22,7 @@ these papers.)
 
 The primary input for the algorithm is a csv file containing survey responses, formatted as follows:
 
-| interviewer_id  | question_1 | question_2 |
+| interviewer_id  | question_a | question_b |
 | -------------   | ------------- | ------------- |
 | 1  | answer_1a  | answer_1b  |
 | 2  | answer_2a  | answer_2b  |
@@ -32,9 +32,10 @@ The distribution of answers from Interviewer 1 are compared to the distribution 
 
 ## Usage
 
-1. Once you've downloded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. You can do this easily by running the following command:
+1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. You can do this easily by running the following commands:
 
 ```bash
+python3 setup.py install
 pip install -r requirements.txt
 ```
 
@@ -60,7 +61,7 @@ python3 example.py
 ```bash
 MMA outlier scores
 1
-Question: question_1
+Question: question_a
 Score: 15
 ```
 
