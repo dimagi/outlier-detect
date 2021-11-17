@@ -32,7 +32,7 @@ The distribution of answers from Interviewer 1 are compared to the distribution 
 
 ## Usage
 
-1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. You can do this easily by running the following commands:
+1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. Optionally, you can do this by running the following commands:
 
 ```bash
 python3 setup.py install
