@@ -42,6 +42,7 @@ def print_scores(scores):
             print("Question: %s" % column)
             print("Score: %d" % score)
 
+            # Uncomment the following to print additional information about each outlier:
             # observed_frequencies = scores[interviewer][column]['observed_freq']
             # expected_frequencies = scores[interviewer][column]['expected_freq']
             # p_value = scores[interviewer][column]['p_value']
@@ -57,4 +58,4 @@ if __name__ == '__main__':
     if hasattr(outlierdetect, 'run_mma'):
         compute_mma(data)
     
-    # compute_sva(data)
+    # compute_sva(data) # Uncomment to use the SVA algorithm.

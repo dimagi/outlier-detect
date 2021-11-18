@@ -32,11 +32,16 @@ The distribution of answers from Interviewer 1 are compared to the distribution 
 
 ## Usage
 
-1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. Optionally, you can do this by running the following commands:
+1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. We recommend you do this by running the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+Optionally, the library is also available to be installed globally, using the following command:
 
 ```bash
 python3 setup.py install
-pip install -r requirements.txt
 ```
 
 2. Once the proper libraries have been installed, open the repository on your code editor of choice.
