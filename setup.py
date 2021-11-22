@@ -3,9 +3,9 @@
 from distutils.core import setup
 
 setup(name='outlierdetect',
-      version='1.0',
+      version='0.2',
       description='Outlier detection algorithms',
-      author='Ben Birnbaum',
+      author='Ben Birnbaum, Brian DeRenzi',
       author_email='bderenzi@dimagi.com',
       url='https://github.com/dimagi/outlier-detect',
       packages=['outlierdetect'],
