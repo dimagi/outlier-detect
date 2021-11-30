@@ -8,3 +8,5 @@ COPY . /usr/local/outlier
 
 WORKDIR /usr/local/outlier
 RUN python3 setup.py install
+
+WORKDIR /src
