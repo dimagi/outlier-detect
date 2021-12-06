@@ -97,4 +97,7 @@ print("Expected Frequencies: %s" % expected_frequencies)
 print("P-Value: %d" % p_value)
 ```
 
+## Performance Tips & Tricks
+
+* The algorithm runs on questions individually, which means that you can load a smaller number of questions at a time. This is recommended for projects that have a large amount of data, as attempting to run the algorithm on it may lead to performance hiccups.
 
