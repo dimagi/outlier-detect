@@ -30,7 +30,9 @@ The primary input for the algorithm is a csv file containing survey responses, f
 
 The distribution of answers from Interviewer 1 are compared to the distribution of answers from both Interviewers 2 & 3. Likewise for Interviewer 2 with the answers of 1 & 3 and for Interviewer 3 with 1 & 2.
 
-## Usage
+## Installation
+
+### Native
 
 1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. We recommend you do this by running the following command:
 
@@ -43,6 +45,18 @@ Optionally, the library is also available to be installed globally, using the fo
 ```bash
 python3 setup.py install
 ```
+
+### Docker image
+
+Optionally pull https://hub.docker.com/repository/docker/arongizra/outlier-detect/general
+ahead of the first execution..
+
+Execute a calculation:
+```bash
+docker run -v $PWD:/src arongizra/outlier-detect:0.1 python example.py
+```
+
+## Usage
 
 2. Once the proper libraries have been installed, open the repository on your code editor of choice.
 
