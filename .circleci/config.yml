@@ -6,7 +6,8 @@ jobs:
       - image: cimg/python:3.10.7
     steps:
       - checkout
-      - run: echo "this is the test job"
+      - run: pip install -r requirements.txt
+      - run: python example.py
 
 workflows:
   build_and_test:
