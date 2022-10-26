@@ -1,0 +1,14 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/python:3.10.7
+    steps:
+      - checkout
+      - run: echo "this is the test job"
+
+workflows:
+  build_and_test:
+    jobs:
+      - test
