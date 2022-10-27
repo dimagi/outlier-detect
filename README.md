@@ -34,7 +34,7 @@ The distribution of answers from Interviewer 1 are compared to the distribution 
 
 ### Requirements
 
- - Python 3.1 - 3.11
+ - Python [3.5 - 3.10] versions are supported
 
 ### Native
 
