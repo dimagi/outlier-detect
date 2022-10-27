@@ -32,6 +32,10 @@ The distribution of answers from Interviewer 1 are compared to the distribution 
 
 ## Installation
 
+### Requirements
+
+ - Python 3.1 - 3.11
+
 ### Native
 
 1. Once you've downloaded or cloned this repository, you need to first make sure the necessary libararies are installed on your machine. We recommend you do this by running the following command:
