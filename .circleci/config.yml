@@ -1,17 +1,17 @@
 version: 2.1
 
 jobs:
-  test_3_1:
+  test_3_5:
     docker:
-      - image: cimg/python:3.1.0
+      - image: cimg/python:3.5.7
     steps:
       - checkout
       - run: pip install -r requirements.txt
       - run: python example.py
 
-  test_3_11:
+  test_3_10:
     docker:
-      - image: cimg/python:3.11.0
+      - image: cimg/python:3.10.7
     steps:
       - checkout
       - run: pip install -r requirements.txt
@@ -20,5 +20,5 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - test_3_1
-      - test_3_11
+      - test_3_5
+      - test_3_10
