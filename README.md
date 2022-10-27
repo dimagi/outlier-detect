@@ -1,5 +1,7 @@
 # Outlier Detect
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/dimagi/outlier-detect/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/gimagi/outlier-detect/tree/master)
+
 **Author**: Ben Birnbaum (benjamin.birnbaum@gmail.com)
 
 **Contributors**: Faisal Lalani (flalani@dimagi.com), Brian DeRenzi (bderenzi@dimagi.com)
