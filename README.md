@@ -12,7 +12,7 @@ B. Birnbaum, B. DeRenzi, A. D. Flaxman, and N. Lesh.  Automated quality control
 for mobile data collection. In DEV ’12, pages 1:1–1:10, 2012.
 
 B. Birnbaum. Algorithmic approaches to detecting interviewer fabrication in
-surveys.  Ph.D. Dissertation, Univeristy of Washington, Department of Computer
+surveys.  Ph.D. Dissertation, University of Washington, Department of Computer
 Science and Engineering, 2012.
 
 (See http://bbirnbaum.com/publications/ for PDF versions of
