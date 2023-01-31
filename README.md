@@ -1,5 +1,7 @@
 # Outlier Detect
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/dimagi/outlier-detect/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/gimagi/outlier-detect/tree/master)
+
 **Author**: Ben Birnbaum (benjamin.birnbaum@gmail.com)
 
 **Contributors**: Faisal Lalani (flalani@dimagi.com), Brian DeRenzi (bderenzi@dimagi.com)
@@ -31,6 +33,10 @@ The primary input for the algorithm is a csv file containing survey responses, f
 The distribution of answers from Interviewer 1 are compared to the distribution of answers from both Interviewers 2 & 3. Likewise for Interviewer 2 with the answers of 1 & 3 and for Interviewer 3 with 1 & 2.
 
 ## Installation
+
+### Requirements
+
+ - Python [3.8 - 3.10] versions are supported
 
 ### Native
 

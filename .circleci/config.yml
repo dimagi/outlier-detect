@@ -1,0 +1,24 @@
+version: 2.1
+
+jobs:
+  test_3_8:
+    docker:
+      - image: cimg/python:3.8.15
+    steps:
+      - checkout
+      - run: pip install -r requirements.txt
+      - run: python example.py
+
+  test_3_10:
+    docker:
+      - image: cimg/python:3.10.7
+    steps:
+      - checkout
+      - run: pip install -r requirements.txt
+      - run: python example.py
+
+workflows:
+  build_and_test:
+    jobs:
+      - test_3_8
+      - test_3_10
