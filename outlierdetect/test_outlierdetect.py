@@ -38,8 +38,8 @@ if _STATS_AVAILABLE:
                 'b' : {'y' : 23, 'n' : 49, '-' : 39},
                 'c' : {'y' : 16, 'n' : 12, '-' : 14},
             }
-            outlier_scores= self.model.compute_outlier_scores(frequencies)
-            self.assertEquals(sorted(outlier_scores.keys()), ['a', 'b', 'c'])
+            outlier_scores, _, _= self.model.compute_outlier_scores(frequencies)
+            self.assertEqual(sorted(outlier_scores.keys()), ['a', 'b', 'c'])
             self.assertTrue(float_eq(outlier_scores['a'], 1.3593))
             self.assertTrue(float_eq(outlier_scores['b'], 3.2995))
             self.assertTrue(float_eq(outlier_scores['c'], 3.7355))
@@ -51,7 +51,7 @@ if _STATS_AVAILABLE:
                 'b' : {1 : 23, 2 : 49, 3 : 39},
                 'c' : {1 : 16, 2 : 12, 3 : 14},
             }
-            outlier_scores = self.model.compute_outlier_scores(frequencies)
+            outlier_scores, _, _ = self.model.compute_outlier_scores(frequencies)
             self.assertTrue(float_eq(outlier_scores['a'], 1.3593))
             self.assertTrue(float_eq(outlier_scores['b'], 3.2995))
             self.assertTrue(float_eq(outlier_scores['c'], 3.7355))
@@ -70,7 +70,7 @@ class TestSValueModel(unittest.TestCase):
             'd' : {'y' : 9,  'n' : 1,  '-' : 0},
             'e' : {'y' : 18, 'n' : 12, '-' : 0},
         }
-        outlier_scores = self.model.compute_outlier_scores(frequencies)
+        outlier_scores, _, _ = self.model.compute_outlier_scores(frequencies)
         self.assertEqual(sorted(outlier_scores.keys()), ['a', 'b', 'c', 'd', 'e'])
         self.assertTrue(float_eq(outlier_scores['a'], .333333))
         self.assertTrue(float_eq(outlier_scores['b'], .333333))
@@ -87,7 +87,7 @@ class TestSValueModel(unittest.TestCase):
             'd' : {1 : 9,  2 : 1,  3 : 0},
             'e' : {1 : 18, 2 : 12, 3 : 0},
         }
-        outlier_scores = self.model.compute_outlier_scores(frequencies)
+        outlier_scores, _, _ = self.model.compute_outlier_scores(frequencies)
         self.assertEqual(sorted(outlier_scores.keys()), ['a', 'b', 'c', 'd', 'e'])
         self.assertTrue(float_eq(outlier_scores['a'], .333333))
         self.assertTrue(float_eq(outlier_scores['b'], .333333))
@@ -118,30 +118,32 @@ class TestGetFrequencies(unittest.TestCase):
 
     def test_get_frequencies_rec_array(self):
         freq, _ = _get_frequencies(self.data_rec_array, 'question', ['yes', 'no'], 'interviewer', 'a', self.agg_to_data)
-        self.assertEquals(
+        self.assertEqual(
             freq,
             {'yes' : 3, 'no' : 1})
         freq, _ = _get_frequencies(self.data_rec_array, 'question', ['yes', 'no'], 'interviewer', 'b', self.agg_to_data)
-        self.assertEquals(
+        self.assertEqual(
             freq,
             {'yes' : 0, 'no' : 2})
-        self.assertEquals(
-            _get_frequencies(self.data_rec_array, 'question', ['yes'], 'interviewer', 'a'),
+        freq, _ = _get_frequencies(self.data_rec_array, 'question', ['yes'], 'interviewer', 'a', self.agg_to_data)
+        self.assertEqual(
+            freq,
             {'yes' : 3}
         )
 
 
     def test_get_frequencies_pandas(self):
         freq, _ = _get_frequencies(self.data_pandas, 'question', ['yes', 'no'], 'interviewer', 'a', self.agg_to_data)
-        self.assertEquals(
+        self.assertEqual(
             freq,
             {'yes' : 3, 'no' : 1})
         freq, _ = _get_frequencies(self.data_pandas, 'question', ['yes', 'no'], 'interviewer', 'b', self.agg_to_data)
-        self.assertEquals(
+        self.assertEqual(
             freq,
             {'yes' : 0, 'no' : 2})
-        self.assertEquals(
-            _get_frequencies(self.data_pandas, 'question', ['yes'], 'interviewer', 'a'),
+        freq, _ = _get_frequencies(self.data_pandas, 'question', ['yes'], 'interviewer', 'a', self.agg_to_data)
+        self.assertEqual(
+            freq,
             {'yes' : 3}
         )
 
@@ -166,9 +168,9 @@ class TestInterfaceFunctions(unittest.TestCase):
             ('c', 'n', 'y', 'n'),
             ('c', 'n', 'n', 'y'),
             ('c', 'y', 'n', 'y'),
-            ('c', 'n', 'n', '-'),
-        ], dtype=[('interviewer', 'a1'), ('q1', 'a1'), ('q2', 'a1'), ('q3', 'a1')])
-        self.data_pandas = pd.DataFrame(self.data_rec_array)
+            ('c', 'n', 'n', '-')
+       ], dtype=[('interviewer', 'U1'), ('q1', 'U1'), ('q2', 'U1'), ('q3', 'U1')])
+        self.data_pandas = pd.DataFrame.from_records(data = self.data_rec_array, columns=['interviewer', 'q1', 'q2', 'q3'])
         self.interviewers = ['a', 'b', 'c']
         self.questions = ['q1', 'q2', 'q3']
         self.frequencies = {
@@ -193,11 +195,11 @@ class TestInterfaceFunctions(unittest.TestCase):
 
     def _test_function_using_model(self, f, model, data):
         outlier_scores, _ = f(data, 'interviewer', ['q1', 'q2'])
-        q1_scores = model.compute_outlier_scores(self.q1_frequencies)
-        q2_scores = model.compute_outlier_scores(self.q2_frequencies)
+        q1_scores, _, _ = model.compute_outlier_scores(self.frequencies['q1'])
+        q2_scores, _, _ = model.compute_outlier_scores(self.frequencies['q2'])
         for interviewer in ['a', 'b', 'c']:
-            self.assertEquals(outlier_scores[interviewer]['q1'], q1_scores[interviewer])
-            self.assertEquals(outlier_scores[interviewer]['q2'], q2_scores[interviewer])
+            self.assertEqual(outlier_scores[interviewer]['q1']['score'], q1_scores[interviewer])
+            self.assertEqual(outlier_scores[interviewer]['q2']['score'], q2_scores[interviewer])
 
 
     if _STATS_AVAILABLE:

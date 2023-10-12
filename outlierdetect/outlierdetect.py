@@ -197,12 +197,14 @@ class SValueModel:
         Returns:
             - dictionary mapping (aggregation unit) -> (SVA outlier score for aggregation unit).
             - dictionary mapping (aggregation unit) ->  return from _normalize_counts: (a dictionary mapping (value) -> (normalized number of times all aggregation units apart from agg_unit reported this value)).
+            - dictionary mapping (aggregation unit) -> (P value for aggregation unit), set to None for now and included here for consistent interface among the two models.
         """
         if (len(frequencies.keys()) < 2):
             raise Exception("There must be at least 2 aggregation units.")
         outlier_values = {}
         rng = frequencies[list(frequencies.keys())[0]].keys()
         normalized_frequencies = {}
+        p_values = {}
         for j in list(frequencies.keys()):
             # If j doesn't have any answers for given question, remove j and
             # assign outlier score of 0.
@@ -219,7 +221,9 @@ class SValueModel:
             outlier_values[j] = 0
             for r in rng:
                 outlier_values[j] += abs(normalized_frequencies[j][r] - medians[r])
-        return self._normalize(outlier_values), normalized_frequencies
+        for j in list(frequencies.keys()):
+            p_values[j] = None
+        return self._normalize(outlier_values), normalized_frequencies, p_values
     
     
     def _normalize(self, value_dict):
@@ -286,15 +290,10 @@ def _get_frequencies(data, col, col_vals, agg_col, agg_unit, agg_to_data):
         frequencies[col_val] = 0
         # We can't just use collections.Counter() because frequencies.keys() is used to determine
         # the range of possible values in other functions.
-    if _PANDAS_AVAILABLE and isinstance(data, pd.DataFrame):
-        interesting_data = agg_to_data[agg_unit][col]
-        for name in interesting_data:
-            if name in frequencies:
-                frequencies[name] = frequencies[name] + 1
-    else:  # Assumes it is an np.ndarray
-        for row in itertools.ifilter(lambda row : row[agg_col] == agg_unit, data):
-            if row[col] in frequencies:
-                frequencies[row[col]] += 1
+    interesting_data = agg_to_data[agg_unit][col]
+    for name in interesting_data:
+        if name in frequencies:
+            frequencies[name] = frequencies[name] + 1
     return frequencies, interesting_data
 
 def _run_alg(data, agg_col, cat_cols, model, null_responses):
