@@ -54,12 +54,14 @@ python3 setup.py install
 
 ### Docker image
 
-Optionally pull https://hub.docker.com/repository/docker/arongizra/outlier-detect/general
-ahead of the first execution..
+Build the Docker image:
+```bash
+docker build . -t outlier-detect:latest
+```
 
 Execute a calculation:
 ```bash
-docker run -v $PWD:/src arongizra/outlier-detect:0.1 python example.py
+docker run -v $PWD:/src outlier-detect:latest python example.py
 ```
 
 ## Usage
