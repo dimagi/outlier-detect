@@ -1,9 +1,9 @@
 version: 2.1
 
 jobs:
-  test_3_8:
+  test_3_9:
     docker:
-      - image: cimg/python:3.8.15
+      - image: cimg/python:3.9.18
     steps:
       - checkout
       - run: pip install -r requirements.txt
@@ -20,5 +20,5 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - test_3_8
+      - test_3_9
       - test_3_10
