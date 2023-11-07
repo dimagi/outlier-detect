@@ -106,7 +106,7 @@ if _STATS_AVAILABLE:
 
             Returns:
                 - dictionary mapping (aggregation unit) -> (MMA outlier score for aggregation unit).
-                - dictionary mapping (aggregation unit) ->  return from _sum_frequencies: (a dictionary mapping (value) -> (number of times all aggregation units apart from agg_unit reported this value)).
+                - dictionary mapping (aggregation unit) -> (number of times all aggregation units apart from agg_unit reported this value).
                 - dictionary mapping (aggregation unit) -> (P value for aggregation unit).
             """
             if len(frequencies.keys()) < 2:
@@ -115,22 +115,24 @@ if _STATS_AVAILABLE:
             outlier_scores = {}
             expected_frequencies = {}
             p_values = {}
+            #Find the total sums for all agg units
+            summed_freq = self._sum_frequencies(rng, frequencies)
             for agg_unit in list(frequencies.keys()):
-                summed_freq = self._sum_frequencies(agg_unit, frequencies)
-                expected_frequencies[agg_unit] = summed_freq
-                if(sum(summed_freq.values()) == 0):
+                expected_frequencies[agg_unit] = summed_freq.copy()
+                for r in rng:
+                    expected_frequencies[agg_unit][r] -= frequencies[agg_unit][r]
+                if(sum(expected_frequencies[agg_unit].values()) == 0):
                     outlier_scores[agg_unit] = 0
                     p_values[agg_unit] = 1
                 else:
                     expected_counts = _normalize_counts(
-                        summed_freq,
+                        expected_frequencies[agg_unit],
                         val=sum([frequencies[agg_unit][r] for r in rng]))
                     x2, p_value = self._compute_x2_statistic(expected_counts, frequencies[agg_unit])
                     # logsf gives the log of the survival function (1 - cdf).
                     outlier_scores[agg_unit] = -stats.chi2.logsf(x2, len(rng) - 1)
                     p_values[agg_unit] = p_value
             return outlier_scores, expected_frequencies, p_values
-
 
         def _compute_x2_statistic(self, expected, actual):
             """Computes the X^2 statistic for observed frequencies.
@@ -155,11 +157,11 @@ if _STATS_AVAILABLE:
                                 df=len(rng))
             return chi_squared_stat, p_value
 
-        def _sum_frequencies(self, agg_unit, frequencies):
-            """Sums frequencies for each aggregation unit except the given one.
+        def _sum_frequencies(self, rng, frequencies):
+            """Sums frequencies for each aggregation unit.
             
             Args:
-                agg_unit: the aggregation unit of concern.
+                rng: all possible values to count.
                 frequencies: dictionary of dictionaries, mapping (aggregation unit) -> (value) ->
                     (number of times aggregation unit reported value).
             
@@ -168,18 +170,14 @@ if _STATS_AVAILABLE:
                 agg_unit reported this value)
 
             """
-            # Get the range from the frequencies dictionary.  Assumes that the range is the same
-            # for each aggregation unit in this distribution.  Bad things may happen if this is not
-            # the case.
-            rng = frequencies[agg_unit].keys()
+            # Assumes that the range is the same for each aggregation unit in this distribution.
+            # Bad things may happen if this is not the case.
             all_frequencies = {}
             for r in rng:
                 all_frequencies[r] = 0
-            for other_agg_unit in list(frequencies.keys()):
-                if other_agg_unit == agg_unit:
-                    continue
+            for agg_unit in list(frequencies.keys()):
                 for r in rng:
-                    all_frequencies[r] += frequencies[other_agg_unit][r]        
+                    all_frequencies[r] += frequencies[agg_unit][r]        
             return all_frequencies
 
 
@@ -251,7 +249,6 @@ class SValueModel:
 
 
 ########################################## Helper functions ########################################
-
 def _normalize_counts(counts, val=1):
     """Normalizes a dictionary of counts, such as those returned by _get_frequencies().
 
@@ -268,7 +265,6 @@ def _normalize_counts(counts, val=1):
     for r in list(counts.keys()):
         frequencies[r] = val * float(counts[r]) / float(n)
     return frequencies
-
 
 def _get_frequencies(data, col, col_vals, agg_col, agg_unit, agg_to_data):
     """Computes a frequencies dictionary for a given column and aggregation unit.
@@ -318,11 +314,15 @@ def _run_alg(data, agg_col, cat_cols, model, null_responses):
     outlier_scores = collections.defaultdict(dict)
     agg_to_data = {}
     agg_col_to_data = {}
-    for agg_unit in agg_units:
-        # TODO: could this be smarter and remove data each time? maybe no savings.
-        # TODO: support numpy only again
-        agg_to_data[agg_unit] = data[data[agg_col] == agg_unit]
-        agg_col_to_data[agg_unit] = {}
+    #If data is a df, use groupby for more efficient run
+    if isinstance(data, pd.DataFrame):
+        grouped_data = data.groupby(agg_col)
+        agg_to_data = {agg_unit: group for agg_unit, group in grouped_data}
+    else:
+        for agg_unit in agg_units:
+            agg_to_data[agg_unit] = data[data[agg_col] == agg_unit]
+    agg_col_to_data = {agg_unit:{} for agg_unit in agg_units}
+
         
     for col in cat_cols:
         col_vals = sorted(set(data[col]), key=lambda x: (str(type(x)), x))
