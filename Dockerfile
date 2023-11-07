@@ -1,4 +1,4 @@
-FROM python:3.7.12-buster
+FROM python:3.10.12-buster
 
 COPY requirements.txt .
 

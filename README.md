@@ -36,7 +36,7 @@ The distribution of answers from Interviewer 1 are compared to the distribution 
 
 ### Requirements
 
- - Python [3.8 - 3.10] versions are supported
+ - Python [3.9 - 3.10] versions are supported
 
 ### Native
 
@@ -54,12 +54,14 @@ python3 setup.py install
 
 ### Docker image
 
-Optionally pull https://hub.docker.com/repository/docker/arongizra/outlier-detect/general
-ahead of the first execution..
+Build the Docker image:
+```bash
+docker build . -t outlier-detect:latest
+```
 
 Execute a calculation:
 ```bash
-docker run -v $PWD:/src arongizra/outlier-detect:0.1 python example.py
+docker run -v $PWD:/src outlier-detect:latest python example.py
 ```
 
 ## Usage
