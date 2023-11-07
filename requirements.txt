@@ -6,4 +6,3 @@ scipy==1.9.3
 seaborn==0.11.1
 simple-settings==1.0.0
 datasets==2.14.6
-line-profiler==4.1.1

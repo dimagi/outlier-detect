@@ -68,7 +68,6 @@ import collections
 import itertools
 import numpy as np
 import sys
-from line_profiler import profile
 
 # Import optional dependencies
 _PANDAS_AVAILABLE = False
@@ -98,7 +97,6 @@ if _STATS_AVAILABLE:
     class MultinomialModel:
         """Model implementing MMA.  Requries scipy module."""
 
-        @profile
         def compute_outlier_scores(self, frequencies):
             """Computes the SVA outlier scores fo the given frequencies dictionary.
 
@@ -136,7 +134,6 @@ if _STATS_AVAILABLE:
                     p_values[agg_unit] = p_value
             return outlier_scores, expected_frequencies, p_values
 
-        @profile
         def _compute_x2_statistic(self, expected, actual):
             """Computes the X^2 statistic for observed frequencies.
             Args:
@@ -160,7 +157,6 @@ if _STATS_AVAILABLE:
                                 df=len(rng))
             return chi_squared_stat, p_value
 
-        @profile
         def _sum_frequencies(self, rng, frequencies):
             """Sums frequencies for each aggregation unit.
             
@@ -253,7 +249,6 @@ class SValueModel:
 
 
 ########################################## Helper functions ########################################
-@profile
 def _normalize_counts(counts, val=1):
     """Normalizes a dictionary of counts, such as those returned by _get_frequencies().
 
@@ -271,7 +266,6 @@ def _normalize_counts(counts, val=1):
         frequencies[r] = val * float(counts[r]) / float(n)
     return frequencies
 
-@profile
 def _get_frequencies(data, col, col_vals, agg_col, agg_unit, agg_to_data):
     """Computes a frequencies dictionary for a given column and aggregation unit.
     
@@ -298,7 +292,6 @@ def _get_frequencies(data, col, col_vals, agg_col, agg_unit, agg_to_data):
             frequencies[name] = frequencies[name] + 1
     return frequencies, interesting_data
 
-@profile
 def _run_alg(data, agg_col, cat_cols, model, null_responses):
     """Runs an outlier detection algorithm, taking the model to use as input.
     
@@ -350,7 +343,6 @@ def _run_alg(data, agg_col, cat_cols, model, null_responses):
 ########################################## Public functions ########################################
 
 if _STATS_AVAILABLE:
-    @profile
     def run_mma(data, aggregation_column, categorical_columns, null_responses=[]):
         """Runs the MMA algorithm (requires scipy module).
         

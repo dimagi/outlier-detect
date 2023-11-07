@@ -14,7 +14,6 @@ import pandas as pd
 import numpy as np
 from datasets import load_dataset
 import timeit
-from line_profiler import profile
 import outlierdetect
 
 def prepare_dataset(agg_unit_scale=0.01, num_attr=3):
@@ -50,7 +49,6 @@ def prepare_dataset(agg_unit_scale=0.01, num_attr=3):
     attributes = ['education', 'occupation', 'marital.status'][:num_attr]
     return None
 
-@profile
 def run_sample_mma():
     """
     Runs MMA algorithm for benchmarking dataset.
@@ -60,11 +58,6 @@ def run_sample_mma():
         None
     """
     outlierdetect.run_mma(data, agg_col, attributes)
-    return None
-
-def run_line_profiler():
-    prepare_dataset()
-    run_sample_mma()
     return None
 
 
@@ -101,4 +94,3 @@ def run_benchmark():
 
 if __name__ == '__main__':
     run_benchmark()
-    #run_line_profiler()
